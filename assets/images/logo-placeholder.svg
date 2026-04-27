@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 60" width="200" height="60">
+  <rect width="200" height="60" rx="12" fill="#ffffff" fill-opacity="0.05" stroke="#ffffff" stroke-width="1" stroke-opacity="0.2"/>
+  
+  <path d="M35 30l12-12v24z" fill="#3182ce"/>
+  <rect x="52" y="18" width="12" height="24" rx="2" fill="#ffffff" fill-opacity="0.8"/>
+  
+  <text x="75" y="38" font-family="sans-serif" font-size="22" font-weight="800" fill="#ffffff" letter-spacing="2">LOGO</text>
+</svg>

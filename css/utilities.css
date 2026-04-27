@@ -1,0 +1,86 @@
+#stage.large-text {
+    --fs-header-title: 20px;
+    --fs-format-tag: 22px;
+    --fs-section-title: 48px;
+    --fs-body: 26px;
+    --fs-nav-btn: 18px;
+    --fs-quiz-q: 40px;
+    --fs-quiz-opt: 26px;
+    --fs-feedback: 26px;
+    --fs-progress: 16px;
+    --fs-hint: 15px;
+    --fs-sub-card: 22px;
+    --fs-desc: 28px;
+    --fs-breaker-label: 18px;
+    --fs-breaker-val: 40px;
+    --fs-cc: 25px;
+}
+
+#stage.large-text .nav-btn {
+    padding: 14px 20px !important;
+    letter-spacing: 0;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 10px 30px rgba(49, 130, 206, 0.3);
+    }
+
+    50% {
+        transform: scale(1.05);
+        box-shadow: 0 15px 40px rgba(49, 130, 206, 0.5);
+    }
+
+    100% {
+        transform: scale(1);
+        box-shadow: 0 10px 30px rgba(49, 130, 206, 0.3);
+    }
+}
+
+@keyframes pulse-retry {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes bounce-hint {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-6px);
+    }
+}
+
+@keyframes pulse-card-border {
+    0% {
+        border-color: #e1e4e8;
+        transform: scale(1);
+    }
+
+    50% {
+        border-color: var(--vibrant-cyan);
+        transform: scale(1.01);
+    }
+
+    100% {
+        border-color: #e1e4e8;
+        transform: scale(1);
+    }
+}
+
+.sub-comp-card {
+    animation: pulse-card-border 3s infinite ease-in-out;
+}

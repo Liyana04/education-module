@@ -1,0 +1,29 @@
+:root {
+    --dark-navy: #1a202c;
+    --vibrant-cyan: #3182ce;
+    --primary-teal: #2b6cb0;
+    --glass-navy: rgba(26, 32, 44, 0.9);
+    --glass-white: rgba(255, 255, 255, 0.95);
+    --text-white: #ffffff;
+    --text-grey: #4a5568;
+    --stage-bg: #edf2f7;
+    --success-green: #38a169;
+    --success-bg: rgba(56, 161, 105, 0.1);
+    --error-red: #e53e3e;
+    --error-bg: rgba(229, 62, 62, 0.1);
+
+    --fs-header-title: 16px;
+    --fs-section-title: 40px;
+    --fs-body: 20px;
+    --fs-nav-btn: 14px;
+    --fs-quiz-q: 32px;
+    --fs-quiz-opt: 20px;
+    --fs-feedback: 20px;
+    --fs-progress: 13px;
+    --fs-hint: 12px;
+    --fs-sub-card: 16px;
+    --fs-desc: 20px;
+    --fs-breaker-label: 14px;
+    --fs-breaker-val: 32px;
+    --fs-cc: 19px;
+}

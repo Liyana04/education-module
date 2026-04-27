@@ -1,0 +1,179 @@
+{
+    "module_title": "Future of Workplace Productivity",
+    "prototype_overview": {
+        "topic": "Template Integration",
+        "target_audience": "Developer Candidates"
+    },
+    "content_screens": [
+        {
+            "screen_id": 1,
+            "title": "Welcome to the Productivity Suite. Before we dive in, let's look at your toolkit.",
+            "format": "Splash",
+            "content": "Click Start to begin your learning journey."
+        },
+        {
+            "screen_id": 2,
+            "title": "Module Introduction",
+            "format": "Video-Intro",
+            "content": [
+                "This is a placeholder for the course introduction.",
+                "It demonstrates the capability to sync paragraph highlights with audio cues."
+            ],
+            "audio": "assets/audios/placeholder_screen2.wav",
+            "cc_data": [
+                {
+                    "time": 0.0,
+                    "text": "This is a placeholder for the course introduction."
+                },
+                {
+                    "time": 4.0,
+                    "text": "It demonstrates the capability to sync audio."
+                }
+            ]
+        },
+        {
+            "screen_id": 3,
+            "title": "Navigation Guide",
+            "format": "Tour",
+            "content": "Before we begin, let's review the navigation controls. Click the Help icon to start the tour.",
+            "audio": "assets/audios/placeholder_screen3.wav",
+            "cc_data": [
+                {
+                    "time": 0.0,
+                    "text": "Before we begin, let's review the navigation controls."
+                }
+            ]
+        },
+        {
+            "screen_id": 4,
+            "title": "Core Topics Hub",
+            "format": "Interactive-Hub",
+            "content": "Select each topic below to learn more. You must complete all topics to unlock the assessment.",
+            "topics": [
+                "Topic A",
+                "Topic B",
+                "Topic C",
+                "Topic D",
+                "Topic E",
+                "Topic F"
+            ],
+            "audio": "assets/audios/placeholder_screen4.wav",
+            "cc_data": []
+        },
+        {
+            "screen_id": 5,
+            "title": "Topic A: Foundations",
+            "format": "Split-Detail",
+            "sub_topics": [
+                "Principle 1",
+                "Principle 2",
+                "Principle 3"
+            ],
+            "description": "This is the detail screen for Topic A. Review the principles on the right.",
+            "audio": "assets/audios/placeholder_screen5.wav",
+            "cc_data": []
+        },
+        {
+            "screen_id": 6,
+            "title": "Topic B: Implementation",
+            "format": "Split-Detail",
+            "sub_topics": [
+                "Step 1",
+                "Step 2",
+                "Step 3"
+            ],
+            "description": "This is the detail screen for Topic B. Review the steps.",
+            "audio": "assets/audios/placeholder_screen6.wav",
+            "cc_data": []
+        },
+        {
+            "screen_id": 7,
+            "title": "Topic C: Compliance",
+            "format": "Split-Detail",
+            "sub_topics": [
+                "Rule 1",
+                "Rule 2",
+                "Rule 3"
+            ],
+            "description": "This is the detail screen for Topic C. Review the rules.",
+            "audio": "assets/audios/placeholder_screen7.wav",
+            "cc_data": []
+        },
+        {
+            "screen_id": 8,
+            "title": "Topic D: Strategy",
+            "format": "Split-Detail",
+            "sub_topics": [
+                "Tactic 1",
+                "Tactic 2",
+                "Tactic 3"
+            ],
+            "description": "This is the detail screen for Topic D. Review the tactics.",
+            "audio": "assets/audios/placeholder_screen8.wav",
+            "cc_data": []
+        },
+        {
+            "screen_id": 9,
+            "title": "Topic E: Execution",
+            "format": "Split-Detail",
+            "sub_topics": [
+                "Phase 1",
+                "Phase 2",
+                "Phase 3"
+            ],
+            "description": "This is the detail screen for Topic E. Review the phases.",
+            "audio": "assets/audios/placeholder_screen9.wav",
+            "cc_data": []
+        },
+        {
+            "screen_id": 10,
+            "title": "Topic F: Review",
+            "format": "Split-Detail",
+            "sub_topics": [
+                "Metric 1",
+                "Metric 2",
+                "Metric 3"
+            ],
+            "description": "This is the detail screen for Topic F. Review the metrics.",
+            "audio": "assets/audios/placeholder_screen10.wav",
+            "cc_data": []
+        },
+        {
+            "screen_id": 11,
+            "title": "Module Summary",
+            "format": "Breaker",
+            "content": "You have completed all core topics. Proceed to the knowledge check.",
+            "audio": "assets/audios/placeholder_screen11.wav",
+            "cc_data": []
+        }
+    ],
+    "assessment": {
+        "instructions": "Answer the following questions to test your knowledge. You must score 80% or higher to pass.",
+        "audio": "assets/audios/placeholder_assessment.wav",
+        "cc_data": [],
+        "questions": [
+            {
+                "id": 1,
+                "question": "Sample Question 1: What is the primary purpose of this module?",
+                "options": [
+                    "A. Incorrect Option",
+                    "B. Correct Option",
+                    "C. Incorrect Option",
+                    "D. Incorrect Option"
+                ],
+                "answer": "B"
+            },
+            {
+                "id": 2,
+                "question": "Sample Question 2: Which feature ensures accessibility for screen readers?",
+                "options": [
+                    "A. ARIA attributes",
+                    "B. Console logs",
+                    "C. LocalStorage",
+                    "D. SCORM wrappers"
+                ],
+                "answer": "A"
+            }
+        ]
+    }
+}

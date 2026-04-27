@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generic E-Learning Module</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;600;700;800&display=swap"
+        rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div id="stage-container">
+        <div id="stage" role="application" aria-label="E-Learning Course Viewer">
+
+            <header id="top-bar">
+                <div class="header-left">
+                    <div class="logo-area">
+                        <img src="assets/images/logo-placeholder.svg" alt="Company Logo" class="header-logo-img"
+                            onerror="this.style.display='none'">
+                    </div>
+                    <div class="vertical-divider"></div>
+                    <h1 id="module-title" aria-live="polite">MODULE TITLE</h1>
+                </div>
+                <div class="header-right">
+                    <button class="icon-btn" title="Home" aria-label="Return to Start" onclick="goToHome()"><i
+                            data-lucide="home"></i></button>
+                    <button class="icon-btn" title="Menu" aria-label="Open Menu" onclick="toggleMenu()"><i
+                            data-lucide="menu"></i></button>
+                    <button id="font-scale-btn" class="icon-btn" title="Toggle Text Size" onclick="toggleTextScale()"><i
+                            data-lucide="type"></i></button>
+                    <button class="icon-btn help-btn" title="Help / Tour" onclick="startTour()"><i
+                            data-lucide="help-circle"></i></button>
+                </div>
+            </header>
+
+            <main id="slide-content" aria-live="assertive">
+                <div class="slide-inner">
+                    <div class="loading-state">
+                        <p>Loading course content...</p>
+                    </div>
+                </div>
+            </main>
+
+            <footer id="bottom-bar">
+                <div class="controls-left">
+                    <div style="position: relative;">
+                        <div id="audio-hint" class="audio-hint" aria-hidden="true">Audio available. Click 'Play'</div>
+                        <button id="play-pause-btn" class="main-action-btn" aria-label="Play/Pause"
+                            onclick="togglePlay()">
+                            <i data-lucide="play"></i><span>PLAY</span>
+                        </button>
+                    </div>
+                    <div class="control-group">
+                        <button class="icon-only-btn" title="Replay" onclick="replaySlide()"><i
+                                data-lucide="rotate-ccw"></i></button>
+                        <div class="thin-divider"></div>
+                        <button class="icon-only-btn" title="Toggle Audio" onclick="toggleAudio()"><i
+                                data-lucide="volume-2"></i></button>
+                        <div class="thin-divider"></div>
+                        <button class="icon-only-btn" title="Toggle Captions" onclick="toggleCC()"><i
+                                data-lucide="subtitles"></i></button>
+                    </div>
+                </div>
+
+                <div class="controls-center"
+                    style="position: relative; flex-basis: 40%; display: flex; justify-content: center;">
+                    <div class="progress-info" id="progress-container" aria-hidden="true">
+                        <span id="progress-text">SCREEN 1 / X</span>
+                        <div class="progress-track">
+                            <div id="progress-bar"></div>
+                        </div>
+                    </div>
+                    <div id="cc-display"
+                        style="display: none; width: 100%; text-align: center; background: rgba(0, 0, 0, 0.75); color: white; padding: 10px 20px; border-radius: 8px; font-weight: 600;"
+                        aria-live="polite">
+                        Captions will appear here...
+                    </div>
+                    <audio id="slide-audio"></audio>
+                </div>
+
+                <div class="controls-right">
+                    <button id="prev-btn" class="nav-btn secondary" onclick="prevSlide()">BACK</button>
+                    <button id="next-btn" class="nav-btn primary" onclick="nextSlide()">NEXT <i
+                            data-lucide="chevron-right"></i></button>
+                </div>
+            </footer>
+
+            <div id="sidebar-overlay" onclick="toggleMenu()" aria-hidden="true"></div>
+            <div id="sidebar-menu" role="navigation" aria-label="Course Table of Contents">
+                <div class="sidebar-header">
+                    <h3>COURSE OUTLINE</h3>
+                    <button class="icon-btn" onclick="toggleMenu()"><i data-lucide="chevron-right"></i></button>
+                </div>
+                <nav class="sidebar-nav" id="dynamic-nav-container">
+                </nav>
+            </div>
+
+            <div id="glossary-modal" class="modal-overlay" role="dialog" aria-modal="true">
+                <div class="modal-card">
+                    <div class="modal-header">
+                        <h3><i data-lucide="book-open"></i> GLOSSARY</h3>
+                        <button class="close-btn" onclick="closeGlossary()"><i data-lucide="x"></i></button>
+                    </div>
+                    <div class="modal-body">
+                        <h4 id="glossary-title">Term Name</h4>
+                        <p id="glossary-desc">Definition goes here...</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="js/SCORM_API_wrapper.js"></script>
+    <script type="module" src="js/main.js"></script>
+</body>
+
+</html>
