@@ -4,6 +4,7 @@ import { applyLoanwordStyling } from './utils.js';
 export const UI_ENGINE = {
     render(slide, container) {
         try {
+            if (slide.format === 'Video-Intro') return this.renderVideoIntro(slide, container);
             if (slide.format === 'Interactive-Hub') return this.renderHub(slide, container);
             if (slide.format === 'Split-Detail') return this.renderSplitDetail(slide, container);
             return this.renderStandard(slide, container);
@@ -11,6 +12,27 @@ export const UI_ENGINE = {
             console.error('UI_ENGINE Error:', err);
             container.innerHTML = `<p style="color:red">Render Error</p>`;
         }
+    },
+
+    renderVideoIntro(slide, container) {
+        const paragraphs = Array.isArray(slide.content) ? slide.content : [slide.content];
+        const contentHtml = paragraphs
+            .map(p => `<p class="body-text">${applyLoanwordStyling(p)}</p>`)
+            .join('');
+
+        container.innerHTML = `
+            <div class="glass-card video-intro-card">
+                <div class="card-header">
+                    <h2 class="section-title">${applyLoanwordStyling(slide.title)}</h2>
+                </div>
+                <div class="card-body-scroll video-intro-body">
+                    <div class="video-shell">
+                        <video id="slide-video" class="slide-video" playsinline preload="metadata"></video>
+                        <div id="video-cc-overlay" class="video-cc-overlay" aria-live="polite"></div>
+                    </div>
+                    <div class="video-intro-text">${contentHtml}</div>
+                </div>
+            </div>`;
     },
 
     renderStandard(slide, container) {
@@ -87,7 +109,10 @@ export function updateProgress(index) {
         });
     }
 
-    if (slide.format === 'Interactive-Hub' && state.visitedTopics.size < 6) {
+    if (slide.screen_id === 2 && !state.videoComplete) {
+        nextBtn.disabled = true;
+        nextBtn.style.opacity = '0.3';
+    } else if (slide.format === 'Interactive-Hub' && state.visitedTopics.size < 6) {
         nextBtn.disabled = true;
         nextBtn.style.opacity = '0.3';
     } else if (slide.type === 'results') {

@@ -2,7 +2,7 @@ import { state } from './state.js';
 import { initSCORM, reportToLMS } from './scorm.js';
 import { renderSlide } from './renderer.js';
 import { calculateScore, checkAnswer, showFeedback, retryQuiz } from './quiz.js';
-import { loadSlideMedia, togglePlay, updatePlayButtonUI, replaySlide, toggleAudio, toggleCC, syncMediaControlUI } from './media.js';
+import { loadSlideMedia, togglePlay, updatePlayButtonUI, replaySlide, toggleAudio, toggleCC, syncMediaControlUI, initMediaSyncListeners } from './media.js';
 import { UI_ENGINE, updateProgress, applyTextScale, toggleTextScale, showToast } from './ui.js';
 import { resizePlayer, startCourse, nextSlide, prevSlide, jumpToSlide, goToHome, toggleMenu, exitModule } from './navigation.js';
 import { startTour, endTour, nextTourStep } from './tour.js';
@@ -79,22 +79,6 @@ window.addEventListener('load', () => {
     initPlayer();
     applyTextScale();
 
-    const audioEl = document.getElementById('slide-audio');
-    const ccDisplay = document.getElementById('cc-display');
-    if (audioEl) {
-        audioEl.addEventListener('timeupdate', () => {
-            if (!state.isCCEnabled || state.currentCCData.length === 0) return;
-            const currentTime = audioEl.currentTime;
-            let activeText = '';
-            for (let i = 0; i < state.currentCCData.length; i++) {
-                if (currentTime >= state.currentCCData[i].time) activeText = state.currentCCData[i].text;
-                else break;
-            }
-            if (activeText && ccDisplay) ccDisplay.innerHTML = activeText;
-        });
-        audioEl.addEventListener('ended', () => { updatePlayButtonUI(); syncMediaControlUI(); });
-        audioEl.addEventListener('pause', () => { updatePlayButtonUI(); syncMediaControlUI(); });
-        audioEl.addEventListener('play', () => { updatePlayButtonUI(); syncMediaControlUI(); });
-    }
+    initMediaSyncListeners();
     if (typeof lucide !== 'undefined') lucide.createIcons();
 });

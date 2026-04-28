@@ -571,3 +571,53 @@
     transform: translateZ(0);
     backface-visibility: hidden;
 }
+
+.video-intro-card {
+    max-width: 1420px;
+}
+
+.video-intro-body {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.video-shell {
+    width: min(100%, 1200px);
+    margin: 0 auto;
+    aspect-ratio: 16 / 9;
+    border-radius: 18px;
+    overflow: hidden;
+    position: relative;
+    background: #000;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+}
+
+.slide-video {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    background: #000;
+}
+
+.video-cc-overlay {
+    position: absolute;
+    left: 5%;
+    right: 5%;
+    bottom: 20px;
+    min-height: 56px;
+    padding: 10px 20px;
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.78);
+    color: #fff;
+    font-size: var(--fs-cc);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    pointer-events: none;
+}
+
+.video-intro-text {
+    text-align: center;
+}

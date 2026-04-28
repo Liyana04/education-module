@@ -8,6 +8,7 @@ export const state = {
     isCCEnabled: true,
     currentCCData: [],
     isAudioMuted: false,
+    videoComplete: false,
     isLargeText: localStorage.getItem('course_large_text') === 'true',
     scorm: null,
 };
