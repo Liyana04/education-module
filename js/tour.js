@@ -3,20 +3,41 @@ import { state } from './state.js';
 let currentTourStep = 0;
 
 const tourData = [
-    { target: '.header-right', title: 'Menu & Controls', text: 'Use this bar to return Home, adjust Text Size, or view the Course Outline.' },
-    { target: '#play-pause-btn', title: 'Media & Audio', text: 'Control the voiceover or video playback using this button.' },
-    { target: '.controls-center', title: 'Module Progress', text: 'Closed captions will appear in this area when activated.' },
-    { target: '.controls-right', title: 'Navigation', text: "Click 'Next' or 'Back' to explore the module sequentially." }
+    { target: 'button[title="Menu"]', title: 'Sidebar', text: 'Use this menu button to open the course outline and jump between sections.' },
+    { target: '#font-scale-btn', title: 'Text Enlargement', text: 'Toggle text size to make content easier to read without changing your progress.' },
+    { target: '#progress-container', title: 'Progress Bar', text: 'This bar shows where you are in the module and updates as you advance.' }
 ];
 
-export function endTour() {
-    const tour = document.getElementById('tour-master');
-    if (tour) tour.remove();
+function toggleGuidedHighlights(enabled) {
+    const targets = [
+        document.querySelector('button[title="Home"]'),
+        document.querySelector('button[title="Menu"]'),
+        document.getElementById('font-scale-btn')
+    ];
+    targets.forEach((el) => {
+        if (!el) return;
+        if (enabled) el.classList.add('tour-pulse-target');
+        else el.classList.remove('tour-pulse-target');
+    });
 }
 
-export function startTour() {
+export function endTour(completed = false) {
+    const tour = document.getElementById('tour-master');
+    if (tour) tour.remove();
+    if (completed) state.tourCompleted = true;
+    toggleGuidedHighlights(false);
+    if (typeof window.__updateProgress === 'function') {
+        window.__updateProgress(state.currentSlideIndex);
+    }
+}
+
+export function launchTour() {
     if (document.getElementById('tour-master')) return;
+    if (state.currentSlideIndex < 0 || !state.allSlides[state.currentSlideIndex]) return;
+    const slide = state.allSlides[state.currentSlideIndex];
+    if (slide.screen_id !== 1) return;
     currentTourStep = 0;
+    toggleGuidedHighlights(true);
     const tourWrap = document.createElement('div');
     tourWrap.id = 'tour-master';
     tourWrap.className = 'tour-overlay-master';
@@ -28,13 +49,17 @@ export function startTour() {
             <div style="margin-top:25px; display:flex; justify-content:space-between; align-items:center;">
                 <span id="step-count" style="font-size:12px; color:#999; font-weight:700;"></span>
                 <div style="display:flex; gap:10px;">
-                    <button class="nav-btn secondary" onclick="endTour()" style="padding:10px 15px; font-size:12px;">CLOSE</button>
+                    <button class="nav-btn secondary" onclick="endTour(false)" style="padding:10px 15px; font-size:12px;">CLOSE</button>
                     <button class="nav-btn primary" id="tour-next-btn" onclick="nextTourStep()" style="padding:10px 20px; font-size:12px;">NEXT</button>
                 </div>
             </div>
         </div>`;
     document.getElementById('stage').appendChild(tourWrap);
     updateTourUI();
+}
+
+export function startTour() {
+    launchTour();
 }
 
 export function updateTourUI() {
@@ -44,7 +69,7 @@ export function updateTourUI() {
     const tip = document.getElementById('tour-tip');
     const nextBtn = document.getElementById('tour-next-btn');
 
-    if (!targetEl) { endTour(); return; }
+    if (!targetEl) { endTour(false); return; }
 
     const rect = targetEl.getBoundingClientRect();
     const stageRect = document.getElementById('stage').getBoundingClientRect();
@@ -72,13 +97,12 @@ export function updateTourUI() {
 
     tip.style.left = tip.style.right = tip.style.top = tip.style.bottom = tip.style.transform = '';
     if (currentTourStep === 0) { tip.style.top = '100px'; tip.style.right = '40px'; }
-    else if (currentTourStep === 1) { tip.style.bottom = '130px'; tip.style.left = '40px'; }
+    else if (currentTourStep === 1) { tip.style.top = '100px'; tip.style.right = '40px'; }
     else if (currentTourStep === 2) { tip.style.bottom = '130px'; tip.style.left = '50%'; tip.style.transform = 'translateX(-50%)'; }
-    else if (currentTourStep === 3) { tip.style.bottom = '130px'; tip.style.right = '40px'; }
 }
 
 export function nextTourStep() {
     currentTourStep++;
     if (currentTourStep < tourData.length) updateTourUI();
-    else endTour();
+    else endTour(true);
 }

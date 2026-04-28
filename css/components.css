@@ -621,3 +621,43 @@
 .video-intro-text {
     text-align: center;
 }
+
+.guided-splash-card {
+    max-width: 1200px;
+    background: rgba(255, 255, 255, 0.58);
+    border: 1px solid rgba(255, 255, 255, 0.45);
+    backdrop-filter: blur(16px);
+}
+
+.guided-splash-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    min-height: 420px;
+    gap: 18px;
+}
+
+.guided-splash-title {
+    max-width: 980px;
+}
+
+.guided-splash-text {
+    font-size: calc(var(--fs-body) * 1.08);
+    max-width: 980px;
+}
+
+.tour-pulse-target {
+    position: relative;
+}
+
+.tour-pulse-target::after {
+    content: '';
+    position: absolute;
+    inset: -10px;
+    border-radius: 9999px;
+    border: 2px solid rgba(49, 130, 206, 0.9);
+    animation: tour-ring-pulse 1.6s infinite;
+    pointer-events: none;
+}

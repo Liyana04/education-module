@@ -4,6 +4,7 @@ import { applyLoanwordStyling } from './utils.js';
 export const UI_ENGINE = {
     render(slide, container) {
         try {
+            if (slide.format === 'Splash') return this.renderGuidedSplash(slide, container);
             if (slide.format === 'Video-Intro') return this.renderVideoIntro(slide, container);
             if (slide.format === 'Interactive-Hub') return this.renderHub(slide, container);
             if (slide.format === 'Split-Detail') return this.renderSplitDetail(slide, container);
@@ -12,6 +13,16 @@ export const UI_ENGINE = {
             console.error('UI_ENGINE Error:', err);
             container.innerHTML = `<p style="color:red">Render Error</p>`;
         }
+    },
+
+    renderGuidedSplash(slide, container) {
+        const introText = applyLoanwordStyling(slide.content || slide.title || "Welcome to the Productivity Suite. Before we dive in, let's look at your toolkit.");
+        container.innerHTML = `
+            <div class="glass-card guided-splash-card">
+                <div class="card-body-scroll guided-splash-body">
+                    <p class="body-text guided-splash-text">${introText}</p>
+                </div>
+            </div>`;
     },
 
     renderVideoIntro(slide, container) {
@@ -109,7 +120,10 @@ export function updateProgress(index) {
         });
     }
 
-    if (slide.screen_id === 2 && !state.videoComplete) {
+    if (slide.screen_id === 1 && !state.tourCompleted) {
+        nextBtn.disabled = true;
+        nextBtn.style.opacity = '0.3';
+    } else if (slide.screen_id === 2 && !state.videoComplete) {
         nextBtn.disabled = true;
         nextBtn.style.opacity = '0.3';
     } else if (slide.format === 'Interactive-Hub' && state.visitedTopics.size < 6) {

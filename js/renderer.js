@@ -4,6 +4,7 @@ import { saveProgress } from './scorm.js';
 import { loadSlideMedia, syncMediaControlUI } from './media.js';
 import { updateProgress, UI_ENGINE } from './ui.js';
 import { showFeedback } from './quiz.js';
+import { launchTour, endTour } from './tour.js';
 
 export function renderSlide(index) {
     if (!state.allSlides[index]) return;
@@ -133,6 +134,11 @@ export function renderSlide(index) {
                 onComplete: () => {
                     if (typeof lucide !== 'undefined') lucide.createIcons();
                     syncMediaControlUI();
+                    if (slide.screen_id === 1 && !state.tourCompleted) {
+                        launchTour();
+                    } else {
+                        endTour(false);
+                    }
                 },
             });
             updateProgress(index);

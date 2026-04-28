@@ -9,6 +9,7 @@ export const state = {
     currentCCData: [],
     isAudioMuted: false,
     videoComplete: false,
+    tourCompleted: false,
     isLargeText: localStorage.getItem('course_large_text') === 'true',
     scorm: null,
 };
