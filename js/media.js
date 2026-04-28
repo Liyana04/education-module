@@ -39,7 +39,7 @@ function evaluateVideoCompletion() {
     if (!slide || slide.screen_id !== 2 || !videoEl || !videoEl.duration) return;
 
     // Unlock "Next" only after reaching the last second of the video.
-    state.videoComplete = videoEl.currentTime >= Math.max(0, videoEl.duration - 1);
+    state.video_Complete = videoEl.currentTime >= Math.max(0, videoEl.duration - 1);
     if (typeof window.__updateProgress === 'function') {
         window.__updateProgress(state.currentSlideIndex);
     }
@@ -65,7 +65,7 @@ export function loadSlideMedia(slide) {
     const controlBtns = document.querySelectorAll('.icon-only-btn');
     if (!audioEl) return;
 
-    state.videoComplete = slide.screen_id !== 2;
+    state.video_Complete = slide.screen_id !== 2;
 
     audioEl.pause();
     audioEl.currentTime = 0;
@@ -86,7 +86,7 @@ export function loadSlideMedia(slide) {
         videoEl.muted = state.isAudioMuted;
         videoEl.onloadedmetadata = () => {
             state.currentCCData = slide.cc_data || [];
-            state.videoComplete = false;
+            state.video_Complete = false;
             if (typeof window.__updateProgress === 'function') {
                 window.__updateProgress(state.currentSlideIndex);
             }
@@ -97,7 +97,7 @@ export function loadSlideMedia(slide) {
             syncMediaControlUI();
         };
         videoEl.onended = () => {
-            state.videoComplete = true;
+            state.video_Complete = true;
             updatePlayButtonUI();
             syncMediaControlUI();
             if (typeof window.__updateProgress === 'function') {

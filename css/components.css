@@ -661,3 +661,129 @@
     animation: tour-ring-pulse 1.6s infinite;
     pointer-events: none;
 }
+
+.focus-card-wrapper {
+    max-width: 1320px;
+}
+
+.focus-card-body {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+}
+
+.focus-card-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px;
+}
+
+.focus-card {
+    border: 2px solid #dde7f1;
+    border-radius: 18px;
+    background: #fff;
+    padding: 28px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    min-height: 260px;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.focus-card h3 {
+    font-size: 26px;
+    color: var(--dark-navy);
+    text-align: center;
+}
+
+.focus-card p {
+    font-weight: 700;
+    color: var(--text-grey);
+}
+
+.focus-card:hover {
+    transform: translateY(-6px);
+    border-color: var(--vibrant-cyan);
+    box-shadow: 0 16px 30px rgba(49, 130, 206, 0.18);
+}
+
+.focus-card.visited {
+    background: #eef8ff;
+    border-color: var(--vibrant-cyan);
+}
+
+.focus-card.visited p {
+    color: var(--success-green);
+}
+
+.focus-card-icon {
+    width: 78px;
+    height: 78px;
+    border-radius: 50%;
+    background: #eef4fb;
+    color: var(--primary-teal);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.focus-card-icon i {
+    width: 36px;
+    height: 36px;
+}
+
+.focus-card-modal-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 2500;
+}
+
+.focus-card-modal-overlay.open {
+    display: flex;
+}
+
+.focus-card-modal {
+    position: relative;
+    width: min(900px, 90%);
+    border-radius: 20px;
+    background: #fff;
+    padding: 26px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    box-shadow: 0 35px 70px rgba(0, 0, 0, 0.35);
+}
+
+.focus-card-close {
+    position: absolute;
+    right: 14px;
+    top: 14px;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    cursor: pointer;
+}
+
+.focus-card-image {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 14px;
+}
+
+.focus-card-modal h3 {
+    font-size: 34px;
+    color: var(--dark-navy);
+}
+
+.focus-card-modal p {
+    font-size: var(--fs-body);
+    color: #2d3748;
+    line-height: 1.5;
+}

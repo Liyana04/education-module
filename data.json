@@ -168,14 +168,30 @@
         },
         {
             "screen_id": 3,
-            "title": "Navigation Guide",
-            "format": "Tour",
-            "content": "Before we begin, let's review the navigation controls. Click the Help icon to start the tour.",
-            "audio": "assets/audios/placeholder_screen3.wav",
-            "cc_data": [
+            "title": "Productivity Focus Areas",
+            "format": "Card-Explore",
+            "content": "Select each card to open a short explanation and visual.",
+            "cards": [
                 {
-                    "time": 0.0,
-                    "text": "Before we begin, let's review the navigation controls."
+                    "id": "time-management",
+                    "title": "Time Management",
+                    "icon": "clock-3",
+                    "description": "Time management is about planning your day around priorities so high-impact tasks get completed first, not just urgent tasks.",
+                    "image": "assets/images/bg-time.png"
+                },
+                {
+                    "id": "deep-work",
+                    "title": "Deep Work",
+                    "icon": "focus",
+                    "description": "Deep work means focused, distraction-free effort on one meaningful task for a set block of time to produce better quality results.",
+                    "image": "assets/images/bg-deep-work.jpg"
+                },
+                {
+                    "id": "collaboration",
+                    "title": "Collaboration",
+                    "icon": "users",
+                    "description": "Collaboration aligns teammates through clear communication, shared goals, and transparent updates so projects move faster together.",
+                    "image": "assets/images/bg-collab.jpg"
                 }
             ]
         },

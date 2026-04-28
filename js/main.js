@@ -3,7 +3,7 @@ import { initSCORM, reportToLMS } from './scorm.js';
 import { renderSlide } from './renderer.js';
 import { calculateScore, checkAnswer, showFeedback, retryQuiz } from './quiz.js';
 import { loadSlideMedia, togglePlay, updatePlayButtonUI, replaySlide, toggleAudio, toggleCC, syncMediaControlUI, initMediaSyncListeners } from './media.js';
-import { UI_ENGINE, updateProgress, applyTextScale, toggleTextScale, showToast } from './ui.js';
+import { UI_ENGINE, updateProgress, applyTextScale, toggleTextScale, showToast, openCardDetail, closeCardDetail } from './ui.js';
 import { resizePlayer, startCourse, nextSlide, prevSlide, jumpToSlide, goToHome, toggleMenu, exitModule } from './navigation.js';
 import { startTour, endTour, nextTourStep } from './tour.js';
 import { openGlossary, closeGlossary, preloadAssets } from './utils.js';
@@ -34,6 +34,8 @@ window.closeGlossary = closeGlossary;
 window.showToast = showToast;
 window.checkAnswer = checkAnswer;
 window.retryQuiz = retryQuiz;
+window.openCardDetail = openCardDetail;
+window.closeCardDetail = closeCardDetail;
 
 window.jumpToTopic = function (topicId) {
     state.visitedTopics.add(topicId);

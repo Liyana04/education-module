@@ -1,11 +1,25 @@
 import { state } from './state.js';
 import { applyLoanwordStyling } from './utils.js';
 
+function getVisitedCardsForScreen(screenId) {
+    if (!state.visitedCardsByScreen[screenId]) {
+        state.visitedCardsByScreen[screenId] = new Set();
+    }
+    return state.visitedCardsByScreen[screenId];
+}
+
+function getCardFromCurrentSlide(cardId) {
+    const slide = state.allSlides[state.currentSlideIndex];
+    if (!slide || !Array.isArray(slide.cards)) return null;
+    return slide.cards.find((item) => item.id === cardId) || null;
+}
+
 export const UI_ENGINE = {
     render(slide, container) {
         try {
             if (slide.format === 'Splash') return this.renderGuidedSplash(slide, container);
             if (slide.format === 'Video-Intro') return this.renderVideoIntro(slide, container);
+            if (slide.format === 'Card-Explore') return this.renderCardExplore(slide, container);
             if (slide.format === 'Interactive-Hub') return this.renderHub(slide, container);
             if (slide.format === 'Split-Detail') return this.renderSplitDetail(slide, container);
             return this.renderStandard(slide, container);
@@ -42,6 +56,40 @@ export const UI_ENGINE = {
                         <div id="video-cc-overlay" class="video-cc-overlay" aria-live="polite"></div>
                     </div>
                     <div class="video-intro-text">${contentHtml}</div>
+                </div>
+            </div>`;
+    },
+
+    renderCardExplore(slide, container) {
+        const visitedCards = getVisitedCardsForScreen(slide.screen_id);
+        const cards = Array.isArray(slide.cards) ? slide.cards : [];
+        const cardsHtml = cards.map((card) => {
+            const isVisited = visitedCards.has(card.id);
+            return `
+                <button class="focus-card ${isVisited ? 'visited' : ''}" data-card-id="${card.id}" onclick="openCardDetail('${card.id}')">
+                    <div class="focus-card-icon"><i data-lucide="${card.icon || 'sparkles'}"></i></div>
+                    <h3>${applyLoanwordStyling(card.title)}</h3>
+                    <p>${isVisited ? 'Visited' : 'Open'}</p>
+                </button>
+            `;
+        }).join('');
+
+        container.innerHTML = `
+            <div class="glass-card focus-card-wrapper">
+                <div class="card-header">
+                    <h2 class="section-title">${applyLoanwordStyling(slide.title)}</h2>
+                </div>
+                <div class="card-body-scroll focus-card-body">
+                    <p class="body-text">${applyLoanwordStyling(slide.content || '')}</p>
+                    <div class="focus-card-grid">${cardsHtml}</div>
+                </div>
+            </div>
+            <div id="focus-card-modal" class="focus-card-modal-overlay" role="dialog" aria-modal="true">
+                <div class="focus-card-modal">
+                    <button class="close-btn focus-card-close" onclick="closeCardDetail()"><i data-lucide="x"></i></button>
+                    <img id="focus-card-image" class="focus-card-image" alt="Card detail image">
+                    <h3 id="focus-card-title"></h3>
+                    <p id="focus-card-desc"></p>
                 </div>
             </div>`;
     },
@@ -97,6 +145,36 @@ export const UI_ENGINE = {
     }
 };
 
+export function openCardDetail(cardId) {
+    const slide = state.allSlides[state.currentSlideIndex];
+    if (!slide || !slide.screen_id) return;
+    const card = getCardFromCurrentSlide(cardId);
+    if (!card) return;
+
+    const visitedCards = getVisitedCardsForScreen(slide.screen_id);
+    visitedCards.add(cardId);
+    const cardButton = document.querySelector(`.focus-card[data-card-id="${cardId}"]`);
+    if (cardButton) cardButton.classList.add('visited');
+
+    const modal = document.getElementById('focus-card-modal');
+    const titleEl = document.getElementById('focus-card-title');
+    const descEl = document.getElementById('focus-card-desc');
+    const imageEl = document.getElementById('focus-card-image');
+    if (!modal || !titleEl || !descEl || !imageEl) return;
+
+    titleEl.textContent = card.title || '';
+    descEl.textContent = card.description || '';
+    imageEl.src = card.image || '';
+    imageEl.alt = card.title || 'Card image';
+    modal.classList.add('open');
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+}
+
+export function closeCardDetail() {
+    const modal = document.getElementById('focus-card-modal');
+    if (modal) modal.classList.remove('open');
+}
+
 export function updateProgress(index) {
     if (state.allSlides.length === 0) return;
     const maxIndex = state.allSlides.length - 1;
@@ -123,7 +201,8 @@ export function updateProgress(index) {
     if (slide.screen_id === 1 && !state.tourCompleted) {
         nextBtn.disabled = true;
         nextBtn.style.opacity = '0.3';
-    } else if (slide.screen_id === 2 && !state.videoComplete) {
+        //else if (slide.screen_id === 2 && !state.video_Complete) change back to this
+    } else if (slide.screen_id === 2 && false) {
         nextBtn.disabled = true;
         nextBtn.style.opacity = '0.3';
     } else if (slide.format === 'Interactive-Hub' && state.visitedTopics.size < 6) {
