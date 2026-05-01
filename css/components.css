@@ -810,7 +810,7 @@
 .focus-card {
     border: 2px solid #dde7f1;
     border-radius: 18px;
-    background: #fff;
+    background: ff;
     padding: 28px 20px;
     display: flex;
     flex-direction: column;
@@ -882,7 +882,7 @@
     width: min(900px, 90%);
     border-radius: 20px;
     background: #fff;
-    padding: 26px;
+    padding: 24px;
     display: flex;
     flex-direction: column;
     gap: 16px;
@@ -890,14 +890,24 @@
 }
 
 .focus-card-close {
-    color: orangered;
     position: absolute;
+    
+    display: flex;
+    align-items: right;
+    justify-content: center;
     right: 14px;
-    top: 14px;
-    background: transparent !important;
+    top: 8px;
+    font-size: 44px;
+    background: none !important;
     border: none !important;
     box-shadow: none !important;
     cursor: pointer;
+}
+
+.focus-card-close svg {
+    width: 48px !important;
+    height: 48px !important;
+    stroke-width: 3.5px; /* Makes the X look bolder */
 }
 
 .focus-card-image {
