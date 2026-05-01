@@ -353,7 +353,7 @@ export function updateProgress(index) {
         nextBtn.disabled = true;
         nextBtn.style.opacity = '0.3';
         //else if (slide.screen_id === 2 && !state.video_Complete) change back to this
-    } else if (slide.screen_id === 2 && false) {
+    } else if (slide.screen_id === 2 && !state.video_Complete) {
         nextBtn.disabled = true;
         nextBtn.style.opacity = '0.3';
     } else if (slide.screen_id === 5 && !state.Module_Complete) {
