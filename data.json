@@ -197,17 +197,17 @@
         },
         {
             "screen_id": 4,
-            "title": "Core Topics Hub",
-            "format": "Interactive-Hub",
-            "content": "Select each topic below to learn more. You must complete all topics to unlock the assessment.",
-            "topics": [
-                "Topic A",
-                "Topic B",
-                "Topic C",
-                "Topic D",
-                "Topic E",
-                "Topic F"
+            "id": 4,
+            "type": "quiz",
+            "title": "Deep Work Question",
+            "question": "Which environment is most conducive to 'Deep Work'?",
+            "options": [
+                "A. Open-plan office with music",
+                "B. Quiet space with no notifications",
+                "C. Multi-tasking during meetings"
             ],
+            "answer": "B",
+            "format": "Quiz",
             "audio": "assets/audios/placeholder_screen4.wav",
             "cc_data": []
         },

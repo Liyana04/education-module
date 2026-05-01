@@ -31,7 +31,8 @@ export function saveProgress(forcedIndex = null) {
         lastIndex: forcedIndex !== null ? forcedIndex : state.currentSlideIndex,
         visitedScreens: Array.from(state.visitedScreens),
         visitedTopics: Array.from(state.visitedTopics),
-        userResponses: state.userResponses
+        userResponses: state.userResponses,
+        kcScore: state.KC_01_Score
     });
     localStorage.setItem('course_progress_data', data);
     if (state.scorm && state.scorm.connection.isActive) {
@@ -51,6 +52,7 @@ export function loadProgress() {
             if (data.visitedScreens) state.visitedScreens = new Set(data.visitedScreens);
             if (data.visitedTopics) state.visitedTopics = new Set(data.visitedTopics);
             if (data.userResponses) state.userResponses = data.userResponses;
+            if (typeof data.kcScore === 'number') state.KC_01_Score = data.kcScore;
         } catch (e) { console.warn('Malformed progress data.'); }
     }
 }

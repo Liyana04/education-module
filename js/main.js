@@ -1,7 +1,7 @@
 import { state } from './state.js';
 import { initSCORM, reportToLMS } from './scorm.js';
 import { renderSlide } from './renderer.js';
-import { calculateScore, checkAnswer, showFeedback, retryQuiz } from './quiz.js';
+import { calculateScore, checkAnswer, showFeedback, retryQuiz, retryQuizItem } from './quiz.js';
 import { loadSlideMedia, togglePlay, updatePlayButtonUI, replaySlide, toggleAudio, toggleCC, syncMediaControlUI, initMediaSyncListeners } from './media.js';
 import { UI_ENGINE, updateProgress, applyTextScale, toggleTextScale, showToast, openCardDetail, closeCardDetail } from './ui.js';
 import { resizePlayer, startCourse, nextSlide, prevSlide, jumpToSlide, goToHome, toggleMenu, exitModule } from './navigation.js';
@@ -34,6 +34,7 @@ window.closeGlossary = closeGlossary;
 window.showToast = showToast;
 window.checkAnswer = checkAnswer;
 window.retryQuiz = retryQuiz;
+window.retryQuizItem = retryQuizItem;
 window.openCardDetail = openCardDetail;
 window.closeCardDetail = closeCardDetail;
 
@@ -52,7 +53,7 @@ async function initPlayer() {
         const response = await fetch('data.json');
         state.rawData = await response.json();
 
-        const content = state.rawData.content_screens.map(s => ({ ...s, type: 'content' }));
+        const content = state.rawData.content_screens.map(s => ({ ...s, type: s.type || 'content' }));
         const questions = state.rawData.assessment.questions.map(q => ({ ...q, type: 'quiz' }));
 
         const splashScreen = { type: 'splash', title: state.rawData.module_title, format: 'E-LEARNING MODULE' };

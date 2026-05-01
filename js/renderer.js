@@ -87,20 +87,30 @@ export function renderSlide(index) {
                         else if (char === userChoice) btnClass += ' wrong-opt';
                         btnClass += ' disabled';
                     }
-                    return `<button class="${btnClass}" onclick="checkAnswer('${char}')" ${answered ? 'disabled' : ''}>${opt}</button>`;
+                    return `<button type="button" class="${btnClass}" aria-label="${opt}" onclick="checkAnswer('${char}')" ${answered ? 'disabled' : ''}>${opt}</button>`;
                 }).join('');
 
                 container.innerHTML = `
-                    <div class="quiz-layout">
+                    <div class="quiz-layout" role="region" aria-labelledby="quiz-question">
                         <p class="format-tag">ASSESSMENT</p>
-                        <h2 class="quiz-q">Question ${slide.id}: ${slide.question}</h2>
-                        <div class="quiz-grid">${optionsHTML}</div>
-                        <div id="feedback" class="feedback-area"></div>
+                        <h2 id="quiz-question" class="quiz-q">Question ${slide.id}: ${slide.question}</h2>
+                        <div class="quiz-grid" role="group" aria-labelledby="quiz-question">${optionsHTML}</div>
+                        <div id="feedback" class="feedback-area" role="status" aria-live="polite" aria-atomic="true"></div>
                     </div>`;
                 if (answered) {
                     setTimeout(() => showFeedback(userChoice === slide.answer, slide.answer), 100);
-                    document.getElementById('next-btn').disabled = false;
-                    document.getElementById('next-btn').style.opacity = '1';
+                    const nextBtn = document.getElementById('next-btn');
+                    if (slide.screen_id === 4 && userChoice !== slide.answer) {
+                        nextBtn.disabled = true;
+                        nextBtn.style.opacity = '0.3';
+                    } else {
+                        nextBtn.disabled = false;
+                        nextBtn.style.opacity = '1';
+                    }
+                } else if (slide.screen_id === 4) {
+                    const nextBtn = document.getElementById('next-btn');
+                    nextBtn.disabled = true;
+                    nextBtn.style.opacity = '0.3';
                 }
             } else if (slide.type === 'results') {
                 const scoreData = typeof window.__calculateScore === 'function' ? window.__calculateScore() : { score: 0, total: 0, percentage: 0 };

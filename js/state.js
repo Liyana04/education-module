@@ -6,6 +6,7 @@ export const state = {
     visitedTopics: new Set(),
     visitedCardsByScreen: {},
     userResponses: {},
+    KC_01_Score: 0,
     isCCEnabled: true,
     currentCCData: [],
     isAudioMuted: false,
