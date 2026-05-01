@@ -32,6 +32,13 @@ window.nextTourStep = nextTourStep;
 window.openGlossary = openGlossary;
 window.closeGlossary = closeGlossary;
 window.showToast = showToast;
+window.handleDragStart = UI_ENGINE.handleDragStart.bind(UI_ENGINE);
+window.handleDragOver = UI_ENGINE.handleDragOver.bind(UI_ENGINE);
+window.handleDrop = UI_ENGINE.handleDrop.bind(UI_ENGINE);
+window.handleDragItemKey = UI_ENGINE.handleDragItemKey.bind(UI_ENGINE);
+window.handleTargetKey = UI_ENGINE.handleTargetKey.bind(UI_ENGINE);
+window.submitDragSort = UI_ENGINE.submitDragSort.bind(UI_ENGINE);
+window.showDragSortHint = UI_ENGINE.showDragSortHint.bind(UI_ENGINE);
 window.checkAnswer = checkAnswer;
 window.retryQuiz = retryQuiz;
 window.retryQuizItem = retryQuizItem;
@@ -77,6 +84,9 @@ async function initPlayer() {
 
 window.addEventListener('resize', resizePlayer);
 window.addEventListener('load', () => {
+    // Clear old cached progress to use fresh pre-filled answers
+    localStorage.removeItem('course_progress_data');
+    
     resizePlayer();
     initSCORM();
     initPlayer();

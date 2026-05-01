@@ -26,12 +26,27 @@ export function reportToLMS() {
     saveProgress();
 }
 
+export function reportModuleCompletion() {
+    if (state.scorm && state.scorm.connection.isActive) {
+        state.scorm.set('cmi.core.lesson_status', 'passed');
+        state.scorm.set('cmi.completion_status', 'completed');
+        state.scorm.set('cmi.success_status', 'passed');
+        state.scorm.save();
+    }
+    saveProgress();
+}
+
 export function saveProgress(forcedIndex = null) {
     const data = JSON.stringify({
         lastIndex: forcedIndex !== null ? forcedIndex : state.currentSlideIndex,
         visitedScreens: Array.from(state.visitedScreens),
         visitedTopics: Array.from(state.visitedTopics),
         userResponses: state.userResponses,
+        dragAssignments: state.dragAssignments,
+        dragAttempts: state.dragAttempts,
+        dragFeedback: state.dragFeedback,
+        dragHintRequested: state.dragHintRequested,
+        Module_Complete: state.Module_Complete,
         kcScore: state.KC_01_Score
     });
     localStorage.setItem('course_progress_data', data);
@@ -51,7 +66,12 @@ export function loadProgress() {
             if (data.lastIndex) state.currentSlideIndex = data.lastIndex;
             if (data.visitedScreens) state.visitedScreens = new Set(data.visitedScreens);
             if (data.visitedTopics) state.visitedTopics = new Set(data.visitedTopics);
-            if (data.userResponses) state.userResponses = data.userResponses;
+            state.userResponses = data.userResponses || {};
+            if (data.dragAssignments) state.dragAssignments = data.dragAssignments;
+            if (data.dragAttempts) state.dragAttempts = data.dragAttempts;
+            if (data.dragFeedback) state.dragFeedback = data.dragFeedback;
+            if (data.dragHintRequested) state.dragHintRequested = data.dragHintRequested;
+            if (typeof data.Module_Complete === 'boolean') state.Module_Complete = data.Module_Complete;
             if (typeof data.kcScore === 'number') state.KC_01_Score = data.kcScore;
         } catch (e) { console.warn('Malformed progress data.'); }
     }

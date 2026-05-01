@@ -213,14 +213,25 @@
         },
         {
             "screen_id": 5,
-            "title": "Topic A: Foundations",
-            "format": "Split-Detail",
-            "sub_topics": [
-                "Principle 1",
-                "Principle 2",
-                "Principle 3"
+            "title": "Sort Tools by Function",
+            "format": "Drag-Sort",
+            "content": "Drag each tool into the correct bucket. Submit once all items are placed.",
+            "draggables": [
+                { "id": "slack", "label": "Slack" },
+                { "id": "trello", "label": "Trello" },
+                { "id": "notion", "label": "Notion" },
+                { "id": "zoom", "label": "Zoom" }
             ],
-            "description": "This is the detail screen for Topic A. Review the principles on the right.",
+            "targets": [
+                { "id": "communication", "label": "Communication" },
+                { "id": "project-management", "label": "Project Management" }
+            ],
+            "correctAssignments": {
+                "slack": "communication",
+                "trello": "project-management",
+                "notion": "project-management",
+                "zoom": "communication"
+            },
             "audio": "assets/audios/placeholder_screen5.wav",
             "cc_data": []
         },

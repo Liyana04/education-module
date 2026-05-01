@@ -18,25 +18,9 @@ export function startCourse(targetIndex) {
 export function nextSlide() {
     const slide = state.allSlides[state.currentSlideIndex];
 
-    // Hub-and-spoke logic check: Return to Hub from sub-topics
-    if (slide.screen_id >= 5 && slide.screen_id <= 10) {
-        const hubIndex = state.allSlides.findIndex(s => s.screen_id === 4);
-        if (hubIndex !== -1) {
-            state.currentSlideIndex = hubIndex;
-            renderSlide(hubIndex);
-            return;
-        }
-    }
+    // Removed hub-and-spoke logic to allow linear progression
 
-    // NEW FIX: If leaving the Hub, skip the sub-topics and jump straight to the Assessment Breaker
-    if (slide.screen_id === 4) {
-        const breakerIndex = state.allSlides.findIndex(s => s.type === 'breaker');
-        if (breakerIndex !== -1) {
-            state.currentSlideIndex = breakerIndex;
-            renderSlide(breakerIndex);
-            return;
-        }
-    }
+    // Removed special jump for screen_id: 4 to allow normal progression to screen_id: 5
 
     if (state.currentSlideIndex >= state.allSlides.length - 1) return;
     state.currentSlideIndex++;

@@ -4,6 +4,8 @@ import { playSFX } from './media.js';
 
 export function checkAnswer(selected) {
     const slide = state.allSlides[state.currentSlideIndex];
+    if (!slide) return;
+    if (!state.userResponses) state.userResponses = {};
     if (state.userResponses[slide.id] !== undefined) return;
     state.userResponses[slide.id] = selected;
 
@@ -59,7 +61,8 @@ export function retryQuizItem() {
 export function calculateScore() {
     const quizQuestions = state.allSlides.filter(s => s.type === 'quiz');
     let score = 0;
-    quizQuestions.forEach(q => { if (state.userResponses[q.id] === q.answer) score++; });
+    const responses = state.userResponses || {};
+    quizQuestions.forEach(q => { if (responses[q.id] === q.answer) score++; });
     return {
         score,
         total: quizQuestions.length,

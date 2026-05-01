@@ -1,5 +1,6 @@
 import { state } from './state.js';
 import { applyLoanwordStyling } from './utils.js';
+import { reportModuleCompletion, saveProgress } from './scorm.js';
 
 function getVisitedCardsForScreen(screenId) {
     if (!state.visitedCardsByScreen[screenId]) {
@@ -21,6 +22,7 @@ export const UI_ENGINE = {
             if (slide.format === 'Video-Intro') return this.renderVideoIntro(slide, container);
             if (slide.format === 'Card-Explore') return this.renderCardExplore(slide, container);
             if (slide.format === 'Interactive-Hub') return this.renderHub(slide, container);
+            if (slide.format === 'Drag-Sort') return this.renderDragSort(slide, container);
             if (slide.format === 'Split-Detail') return this.renderSplitDetail(slide, container);
             return this.renderStandard(slide, container);
         } catch (err) {
@@ -128,6 +130,155 @@ export const UI_ENGINE = {
             </div>`;
     },
 
+    renderDragSort(slide, container) {
+        const assignments = state.dragAssignments[slide.screen_id] || {};
+        const feedback = state.dragFeedback[slide.screen_id] || {};
+        const attempts = state.dragAttempts[slide.screen_id] || 0;
+        const hintRequested = state.dragHintRequested[slide.screen_id];
+        const allPlaced = slide.draggables.every(item => assignments[item.id]);
+
+        const itemsHtml = slide.draggables
+            .filter(item => !assignments[item.id])
+            .map(item => `
+                <button type="button"
+                    class="drag-item"
+                    draggable="true"
+                    tabindex="0"
+                    ondragstart="window.handleDragStart(event)"
+                    onkeydown="window.handleDragItemKey(event)"
+                    data-item-id="${item.id}">
+                    ${item.label}
+                </button>`)
+            .join('');
+
+        const targetsHtml = slide.targets.map(target => {
+            const assignedItems = slide.draggables.filter(item => assignments[item.id] === target.id);
+            const itemsInTarget = assignedItems.map(item => `<div class="drag-target-item">${item.label}</div>`).join('');
+            const showHint = hintRequested ? ' hint' : '';
+            return `
+                <section class="drag-target${showHint}"
+                    id="drag-target-${target.id}"
+                    data-target-id="${target.id}"
+                    ondragover="window.handleDragOver(event)"
+                    ondrop="window.handleDrop(event,'${target.id}')"
+                    onkeydown="window.handleTargetKey(event,'${target.id}')"
+                    tabindex="0"
+                    aria-labelledby="target-label-${target.id}"
+                    aria-dropeffect="move">
+                    <h3 id="target-label-${target.id}">${target.label}</h3>
+                    <div class="drag-slot">${itemsInTarget}</div>
+                </section>`;
+        }).join('');
+
+        const hintButton = attempts >= 2 && !hintRequested && !state.Module_Complete
+            ? `<button class="nav-btn secondary" onclick="window.showDragSortHint()" style="margin-top: 16px;">Show Hint</button>`
+            : '';
+
+        container.innerHTML = `
+            <div class="glass-card drag-sort-card">
+                <div class="card-header"><h2 class="section-title">${slide.title}</h2></div>
+                <div class="card-body-scroll">
+                    <p class="body-text">${slide.content}</p>
+                    <div class="drag-sort-grid">
+                        <div class="drag-items-panel" aria-label="Draggable tools">
+                            <h4 class="drag-panel-title">Tools to sort</h4>
+                            ${itemsHtml}
+                        </div>
+                        <div class="drag-buckets" aria-label="Buckets for sorting tools">
+                            ${targetsHtml}
+                        </div>
+                    </div>
+                    <div id="drag-feedback" class="drag-feedback ${feedback.status || ''}" role="status" aria-live="polite" aria-atomic="true">
+                        ${feedback.message || ''}
+                    </div>
+                    <div class="drag-sort-actions">
+                        <button class="nav-btn primary" onclick="window.submitDragSort()" ${allPlaced && !state.Module_Complete ? '' : 'disabled'} style="margin-top: 20px;">Submit</button>
+                        ${hintButton}
+                    </div>
+                </div>
+            </div>`;
+    },
+
+    handleDragStart(event) {
+        const itemId = event.target.dataset.itemId;
+        if (!itemId) return;
+        event.dataTransfer.setData('text/plain', itemId);
+        event.dataTransfer.effectAllowed = 'move';
+    },
+
+    handleDragOver(event) {
+        event.preventDefault();
+        event.dataTransfer.dropEffect = 'move';
+    },
+
+    handleDrop(event, targetId) {
+        event.preventDefault();
+        const itemId = event.dataTransfer.getData('text/plain');
+        if (!itemId) return;
+        const slide = state.allSlides[state.currentSlideIndex];
+        if (!slide || slide.format !== 'Drag-Sort') return;
+        state.dragAssignments[slide.screen_id] = state.dragAssignments[slide.screen_id] || {};
+        state.dragAssignments[slide.screen_id][itemId] = targetId;
+        state.dragFeedback[slide.screen_id] = {};
+        saveProgress();
+        this.renderDragSort(slide, document.querySelector('#slide-content .slide-inner'));
+    },
+
+    handleDragItemKey(event) {
+        if (event.key !== 'Enter' && event.key !== ' ') return;
+        event.preventDefault();
+        const itemId = event.target.dataset.itemId;
+        if (!itemId) return;
+        window.__keyboardDragItem = itemId;
+        const feedback = document.getElementById('drag-feedback');
+        if (feedback) feedback.textContent = 'Now choose a bucket and press Enter to place the item.';
+    },
+
+    handleTargetKey(event, targetId) {
+        if (event.key !== 'Enter' && event.key !== ' ') return;
+        event.preventDefault();
+        const itemId = window.__keyboardDragItem;
+        if (!itemId) return;
+        const slide = state.allSlides[state.currentSlideIndex];
+        if (!slide || slide.format !== 'Drag-Sort') return;
+        state.dragAssignments[slide.screen_id] = state.dragAssignments[slide.screen_id] || {};
+        state.dragAssignments[slide.screen_id][itemId] = targetId;
+        window.__keyboardDragItem = null;
+        state.dragFeedback[slide.screen_id] = {};
+        this.renderDragSort(slide, document.querySelector('#slide-content .slide-inner'));
+    },
+
+    submitDragSort() {
+        const slide = state.allSlides[state.currentSlideIndex];
+        if (!slide || slide.format !== 'Drag-Sort') return;
+        const assignments = state.dragAssignments[slide.screen_id] || {};
+        const allPlaced = slide.draggables.every(item => assignments[item.id]);
+        if (!allPlaced) return;
+
+        const incorrect = slide.draggables.filter(item => assignments[item.id] !== slide.correctAssignments[item.id]);
+        if (incorrect.length === 0) {
+            state.dragFeedback[slide.screen_id] = { status: 'correct', message: 'Correct! All tools are in the right buckets.' };
+            state.Module_Complete = true;
+            reportModuleCompletion();
+            if (typeof window.__updateProgress === 'function') window.__updateProgress(state.currentSlideIndex);
+        } else {
+            state.dragAttempts[slide.screen_id] = (state.dragAttempts[slide.screen_id] || 0) + 1;
+            state.dragAssignments[slide.screen_id] = {};
+            state.dragFeedback[slide.screen_id] = { status: 'incorrect', message: 'Incorrect. Items have been returned to the start. Try again.' };
+            saveProgress();
+        }
+        this.renderDragSort(slide, document.querySelector('#slide-content .slide-inner'));
+    },
+
+    showDragSortHint() {
+        const slide = state.allSlides[state.currentSlideIndex];
+        if (!slide || slide.format !== 'Drag-Sort') return;
+        state.dragHintRequested[slide.screen_id] = true;
+        state.dragFeedback[slide.screen_id] = { status: 'hint', message: 'Hint: Slack and Zoom belong in Communication. Trello and Notion belong in Project Management.' };
+        saveProgress();
+        this.renderDragSort(slide, document.querySelector('#slide-content .slide-inner'));
+    },
+
     renderSplitDetail(slide, container) {
         let subItems = slide.sub_topics ? slide.sub_topics.map(item => `
             <div class="sub-comp-card">
@@ -203,6 +354,9 @@ export function updateProgress(index) {
         nextBtn.style.opacity = '0.3';
         //else if (slide.screen_id === 2 && !state.video_Complete) change back to this
     } else if (slide.screen_id === 2 && false) {
+        nextBtn.disabled = true;
+        nextBtn.style.opacity = '0.3';
+    } else if (slide.screen_id === 5 && !state.Module_Complete) {
         nextBtn.disabled = true;
         nextBtn.style.opacity = '0.3';
     } else if (slide.format === 'Interactive-Hub' && state.visitedTopics.size < 6) {

@@ -77,9 +77,9 @@ export function renderSlide(index) {
                         <button class="nav-btn primary" onclick="nextSlide()" style="margin: 20px auto 0; padding: 24px 60px; font-size: 18px; border-radius: 16px;">START ASSESSMENT</button>
                     </div>`;
             } else if (slide.type === 'quiz') {
-                const answered = state.userResponses[slide.id] !== undefined;
-                const userChoice = state.userResponses[slide.id];
-                const optionsHTML = slide.options.map(opt => {
+                const answered = state.userResponses?.[slide.id] !== undefined;
+                const userChoice = state.userResponses?.[slide.id];
+                const optionsHTML = slide.options?.map(opt => {
                     const char = opt.charAt(0);
                     let btnClass = 'quiz-opt';
                     if (answered) {
